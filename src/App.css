@@ -147,3 +147,20 @@
     align-items: flex-start;
   }
 }
+
+.map-visualization {
+  height: 350px;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+.map-info {
+  margin-bottom: 10px;
+}
+
+.leaflet-container {
+  height: 300px;
+  width: 100%;
+  border: 1px solid #ccc;
+}

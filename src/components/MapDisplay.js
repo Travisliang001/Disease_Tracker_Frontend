@@ -109,7 +109,7 @@ function MapDisplay({ mapData, coordinates }) {
 
     return (
         <div className="map-container">
-            <h3>Display the case count in the map according to the zip code. (zip code of map with disease count)</h3>
+            <h3>Display the disease heatmap.</h3>
             <div className="map-visualization">
                 {mapData ? (
                     <>

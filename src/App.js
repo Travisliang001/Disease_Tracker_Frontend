@@ -28,7 +28,6 @@ function App() {
 
   const handleSearch = async () => {
     // console.log("Searching with parameters:", { zipCode, selectedDisease, timeRange });
-    setLoading(true); // Set loading to true before starting the search
 
     // Validate zip code
     if (!/^\d{5}$/.test(zipCode)) {
@@ -54,6 +53,7 @@ function App() {
     }
     // sleep for 2 seconds to simulate loading synchronous behavior
 
+    setLoading(true); // Set loading to true before starting the search
 
     try {
       // First, get the latitude and longitude for the ZIP code

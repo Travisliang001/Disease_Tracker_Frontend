@@ -164,3 +164,11 @@
   width: 100%;
   border: 1px solid #ccc;
 }
+
+.loading-logo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}

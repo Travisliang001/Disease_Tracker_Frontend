@@ -12,9 +12,9 @@ function ZipCodeInput({ zipCode, setZipCode }) {
                 onChange={(e) => setZipCode(e.target.value)}
                 className="zip-input"
             />
-            <div className="current-location">
+            {/* <div className="current-location">
                 Use Current Location
-            </div>
+            </div> */}
         </div>
     );
 }

@@ -17,8 +17,8 @@ function MapDisplay({ mapData, coordinates }) {
     const mapInstanceRef = useRef(null);
     const heatLayerRef = useRef(null);
 
-    console.log("MapDisplay component rendered with mapData:", mapData);
-    console.log("Coordinates for map center:", coordinates);
+    // console.log("MapDisplay component rendered with mapData:", mapData);
+
     // Default center of US
     const defaultCenter = coordinates.latitude && coordinates.longitude ? [coordinates.latitude, coordinates.longitude] : [37.8, -96.9];
     const defaultZoom = 4;
@@ -61,6 +61,7 @@ function MapDisplay({ mapData, coordinates }) {
 
     // Generate sample heatmap data and update when mapData changes
     useEffect(() => {
+        console.log("changes", mapData);
         if (!mapInstanceRef.current || !mapData) return;
 
         // Remove previous heat layer if it exists
@@ -70,6 +71,7 @@ function MapDisplay({ mapData, coordinates }) {
         }
 
         // For this example, we'll create some random points around the center
+        console.log("Generating heatmap data for mapData:", mapData);
         const zipCodes = [
             { zip: mapData.zipCode, lat: 39.8283, lng: -98.5795, count: mapData.caseCount },
             { zip: '10001', lat: 40.7501, lng: -73.9964, count: Math.floor(Math.random() * 50) },
@@ -103,7 +105,7 @@ function MapDisplay({ mapData, coordinates }) {
             gradient: { 0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red' }
         }).addTo(mapInstanceRef.current);
 
-    }, [mapData]);
+    }, [mapData, coordinates]);
 
     return (
         <div className="map-container">

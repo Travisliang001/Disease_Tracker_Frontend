@@ -17,27 +17,18 @@ function App() {
   });
   const [displayData, setDisplayData] = useState({
     mapData: {
-      zipCode: '10001',
-      disease: 'COVID-19',
-      caseCount: 47
+      zipCode: '',
+      coordinates: { latitude: null, longitude: null },
+      disease: '',
+      caseCount: 0
     },
-    trendData: {
-      disease: 'COVID-19',
-      timeRange: {
-        from: '2023-01-01',
-        to: '2023-04-01'
-      },
-      dataPoints: [
-        { date: '2023-01-01', count: 32 },
-        { date: '2023-02-01', count: 28 },
-        { date: '2023-03-01', count: 41 },
-        { date: '2023-04-01', count: 37 }
-      ]
-    }
+    trendData: null
   });
+  const [loading, setLoading] = useState(false); // New loading state
 
   const handleSearch = async () => {
-    console.log("Searching with parameters:", { zipCode, selectedDisease, timeRange });
+    // console.log("Searching with parameters:", { zipCode, selectedDisease, timeRange });
+    setLoading(true); // Set loading to true before starting the search
 
     // Validate zip code
     if (!/^\d{5}$/.test(zipCode)) {
@@ -61,6 +52,8 @@ function App() {
       alert('The "from" date cannot be later than the "to" date');
       return;
     }
+    // sleep for 2 seconds to simulate loading synchronous behavior
+
 
     try {
       // First, get the latitude and longitude for the ZIP code
@@ -78,7 +71,7 @@ function App() {
       const latitude = res.lat;
       const longitude = res.lon;
 
-      console.log(`Coordinates for ${zipCode}: Lat ${latitude}, Long ${longitude}`);
+      // console.log(`Coordinates for ${zipCode}: Lat ${latitude}, Long ${longitude}`);
 
       // Now proceed with the rest of your search using these coordinates
       setCoordinates({ latitude, longitude });
@@ -89,26 +82,36 @@ function App() {
         disease: selectedDisease,
         caseCount: Math.floor(Math.random() * 100)
       };
+      console.log('Simulated map data:', simulatedMapData);
 
       // Simulate fetching trend data
       const simulatedTrendData = {
         disease: selectedDisease,
         timeRange,
-        dataPoints: [
-          { date: '2023-01-01', count: Math.floor(Math.random() * 50) },
-          { date: '2023-02-01', count: Math.floor(Math.random() * 50) },
-          { date: '2023-03-01', count: Math.floor(Math.random() * 50) },
-          { date: '2023-04-01', count: Math.floor(Math.random() * 50) }
-        ]
+        dataPoints: Array.from({ length: Math.floor(Math.random() * 6) + 5 }, (_, index) => {
+          const startDate = new Date(timeRange.from);
+          const endDate = new Date(timeRange.to);
+          const timeDiff = endDate - startDate;
+          const randomDate = new Date(startDate.getTime() + Math.random() * timeDiff);
+          return {
+            date: randomDate.toISOString().split('T')[0],
+            count: Math.floor(Math.random() * 50)
+          };
+        }).sort((a, b) => new Date(a.date) - new Date(b.date))
       };
 
       setDisplayData({
         mapData: simulatedMapData,
         trendData: simulatedTrendData
       });
+      // Simulate a delay to mimic network request
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
     } catch (error) {
       console.error('Error in search:', error);
       alert(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,7 +139,11 @@ function App() {
           />
         </div>
       </div>
-
+      {loading && (
+        <div className="loading-logo">
+          <img src="/loading.gif" alt="Loading..." />
+        </div>
+      )}
       <div className="data-display">
         <MapDisplay mapData={displayData.mapData} coordinates={coordinates} />
         <TrendDisplay trendData={displayData.trendData} />
